@@ -11,8 +11,21 @@ public class GeneticAlgorithm : MonoBehaviour
     public int unitsLeft = 10;
     [SerializeField] private BirdModel[] models;
 
-    public float successStrictness = 0.2f; // portion of the best to be selected for the next generation
-    public AnimationCurve geneticStrictness;
+    public AnimationCurve successStrictnessByScore; // portion of the best to be selected for the next generation
+    public AnimationCurve geneticStrictnessByMaxTime;
+    public float successStrictness { get
+        {
+            return 0.02f;
+            float v = successStrictnessByScore.Evaluate(ScoreManager.instance.maxScore);
+            if (v > 0.375f) return 0.5f;
+            if (v > 0.225f) return 0.25f;
+            if (v > 0.15f) return 0.2f;
+            if (v > 0.075f) return 0.1f;
+            if (v > 0.035f) return 0.05f;
+            if (v > 0.015f) return 0.02f;
+            if (v > 0.005f) return 0.01f;
+            return 0.5f;
+        } }
     private int unitVersionsNumber;
 
     private float iterationBeginTime;
@@ -26,6 +39,9 @@ public class GeneticAlgorithm : MonoBehaviour
     public int timeSpeed = 1;
     private Bird[] birds;
     int topn; // number of units to be considered top
+
+    private int mutationi = 0; // counting until next big mutation
+    public int score25; // score gathered in 25 iterations in total
 
     private void Start()
     {
@@ -42,7 +58,6 @@ public class GeneticAlgorithm : MonoBehaviour
             models[i].Randomize();
             birds[i].model = models[i];
         }
-        topn = Mathf.RoundToInt(numberOfUnits * successStrictness);
 
         Begin();
     }
@@ -67,6 +82,7 @@ public class GeneticAlgorithm : MonoBehaviour
     {
         if (unitsLeft <= 0)
         {
+            topn = Mathf.RoundToInt(numberOfUnits * successStrictness);
             List<BirdModel> topModels = models.OrderBy(m => ModelSuccessEvaluation(m)).ToList().GetRange(numberOfUnits-topn-1, topn);
             for (int i = 0; i < topModels.Count; i++)
             {
@@ -75,6 +91,16 @@ public class GeneticAlgorithm : MonoBehaviour
                 topModels[i] = topModels[i].Clone();
             }
             float bestTime = timeSinceBegin;
+            /*mutationi++;
+            score25 += ScoreManager.instance.score;
+            float mutation = 1;
+            if (mutationi >= 25)
+            {
+                mutationi = 0;
+                if (score25 < 40)
+                    mutation = 5;
+                score25 = 0;
+            }*/
             for (int p = 0; p < topn; p++)
             {
                 // for each top unit produce unitVersionsNumber clones with slightly different parameters
@@ -82,13 +108,10 @@ public class GeneticAlgorithm : MonoBehaviour
                 {
                     var m = models[p * unitVersionsNumber + i];
                     m.Inherit(topModels[p].weights);
-                    m.Alter(geneticStrictness.Evaluate(ScoreManager.instance.maxTime));
+                    m.Alter(geneticStrictnessByMaxTime.Evaluate(ScoreManager.instance.maxTime));
                 }
             }
-            if (bestTime > ScoreManager.instance.maxTime)
-                RecordTracker.RecordData(models.Where(m => Mathf.Abs(m.r_time - bestTime) < 0.01f).FirstOrDefault());
             ScoreManager.instance.UpdateRecord(ScoreManager.instance.score, bestTime);
-            unitsLeft = numberOfUnits;
             ScoreManager.instance.Restart();
             ColumnSpawner.instance.Restart();
             Begin();

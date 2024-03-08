@@ -130,7 +130,7 @@ public class BirdModel
         {
             float v = 1+Random.Range(-strictness, strictness);
             //weights[w] *= (Random.value < 0.5f ? 1f / v : v); // Random.Range(1f - strictness, 1f + strictness);
-            weights[w] = weights[w] * v;
+            weights[w] = weights[w] * v;// * (Random.value < 0.01f ? -1 : 1);
         }
     }
 }

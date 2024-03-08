@@ -240,19 +240,42 @@ MonoBehaviour:
   numberOfUnits: 100
   unitsLeft: 100
   models: []
-  successStrictness: 0.05
-  geneticStrictness:
+  successStrictnessByScore:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.2
+      inSlope: -0.004822783
+      outSlope: -0.004822783
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.12985048
+    - serializedVersion: 3
+      time: 20
+      value: 0.02
+      inSlope: -0.00055756886
+      outSlope: -0.00055756886
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.060189247
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  geneticStrictnessByMaxTime:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0.9648018
-      inSlope: -0.008266189
-      outSlope: -0.008266189
+      inSlope: -0.00025102848
+      outSlope: -0.00025102848
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.3895524
+      outWeight: 0.18842946
     - serializedVersion: 3
       time: 24.459988
       value: 0.3329895
@@ -263,8 +286,8 @@ MonoBehaviour:
       inWeight: 0.18200411
       outWeight: 0.12565054
     - serializedVersion: 3
-      time: 56.521606
-      value: 0.1
+      time: 57.28565
+      value: 0.09030585
       inSlope: -0.00014118807
       outSlope: -0.00014118807
       tangentMode: 0
@@ -276,7 +299,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   iteration: 0
   iterationText: {fileID: 1221541384}
-  timeSpeed: 2
+  timeSpeed: 5
 --- !u!4 &421467168
 Transform:
   m_ObjectHideFlags: 0
