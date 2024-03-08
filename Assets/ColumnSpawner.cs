@@ -35,7 +35,7 @@ public class ColumnSpawner : MonoBehaviour
         foreach (var column in columns)
         {
             column.transform.Translate(Vector3.left * CalculateSpeed());
-            if (!column.passed && column.transform.position.x < -7)
+            if (!column.passed && column.transform.position.x < -6.7)
             {
                 column.passed = true;
                 ScoreManager.instance.IncreaseScore(1);

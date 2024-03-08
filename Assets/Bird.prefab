@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 178559544774211603}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.21, y: 0, z: 0}
+  m_LocalPosition: {x: -7, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -56,6 +56,12 @@ MonoBehaviour:
     - 0
     r_time: 0
     r_score: 0
+    r_success: 0
+  horizontalDistance: 0
+  height: 0
+  verticalSpeed: 0
+  bottomEdge: 0
+  topEdge: 0
   value: 0
 --- !u!50 &178559544774211607
 Rigidbody2D:

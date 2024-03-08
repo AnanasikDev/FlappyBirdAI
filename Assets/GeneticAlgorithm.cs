@@ -59,13 +59,13 @@ public class GeneticAlgorithm : MonoBehaviour
 
     private float ModelSuccessEvaluation(BirdModel m)
     {
-        return Mathf.Pow(m.r_time, 2) + Mathf.Pow(m.r_score, 4);
+        return m.r_success;
     }
     private void Update()
     {
         if (unitsLeft <= 0)
         {
-            int topn = (int)(numberOfUnits * successStrictness);
+            int topn = Mathf.RoundToInt(numberOfUnits * successStrictness);
             List<BirdModel> topModels = models.OrderBy(m => ModelSuccessEvaluation(m)).ToList().GetRange(numberOfUnits-topn-1, topn);
             float bestTime = topModels.Max(m => m.r_time);
             for (int p = 0; p < topModels.Count; p++)

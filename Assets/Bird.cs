@@ -38,7 +38,7 @@ public class Bird : MonoBehaviour
 
         value = height * model.weights[0] + 
                 verticalSpeed * model.weights[1] +
-                horizontalDistance * model.weights[2] *
+                horizontalDistance * model.weights[2] +
                 bottomEdge * model.weights[3];
         return value > 0;
     }
@@ -57,9 +57,9 @@ public class Bird : MonoBehaviour
         bottomEdge = horizontalDistance < 11 ?
                 ColumnSpawner.instance.nextColumn.bottomEdge.transform.position.y - transform.position.y
                 : 0;
-        /*topEdge = horizontalDistance < 11 ?
+        topEdge = horizontalDistance < 11 ?
                 transform.position.y - ColumnSpawner.instance.nextColumn.topEdge.transform.position.y
-                : 0;*/
+                : 0;
 
         if (Decide())
             Jump();
@@ -82,6 +82,7 @@ public class Bird : MonoBehaviour
     {
         model.r_time = GeneticAlgorithm.instance.timeSinceBegin;
         model.r_score = ScoreManager.instance.score;
+        model.r_success = GeneticAlgorithm.instance.timeSinceBegin * Mathf.Pow(ScoreManager.instance.score, 2) / (topEdge - bottomEdge != 0 ? Mathf.Pow(Mathf.Abs(topEdge - bottomEdge), 2) : 1);
         GeneticAlgorithm.instance.unitsLeft--;
         gameObject.SetActive(false);
         gameObject.transform.position = initialPosition;
@@ -96,6 +97,8 @@ public class BirdModel
     public float[] weights = new float[4];
     public float r_time;
     public int r_score;
+
+    public float r_success;
 
     public void Randomize()
     {
