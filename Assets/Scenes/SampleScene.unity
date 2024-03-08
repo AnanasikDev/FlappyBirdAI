@@ -240,43 +240,43 @@ MonoBehaviour:
   numberOfUnits: 100
   unitsLeft: 100
   models: []
-  successStrictness: 0.01
+  successStrictness: 0.05
   geneticStrictness:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 3.0377617
-      inSlope: -0.21129872
-      outSlope: -0.21129872
+      value: 0.9648018
+      inSlope: -0.008266189
+      outSlope: -0.008266189
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.06562598
+      outWeight: 0.3895524
     - serializedVersion: 3
-      time: 17.082811
-      value: 0.7913574
-      inSlope: -0.05140286
-      outSlope: -0.05140286
+      time: 24.459988
+      value: 0.3329895
+      inSlope: -0.015159964
+      outSlope: -0.015159964
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.14686227
-      outWeight: 0.084066026
+      inWeight: 0.18200411
+      outWeight: 0.12565054
     - serializedVersion: 3
-      time: 60
-      value: 0.2
-      inSlope: -0.0111851515
-      outSlope: -0.0111851515
+      time: 56.521606
+      value: 0.1
+      inSlope: -0.00014118807
+      outSlope: -0.00014118807
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.10651921
+      inWeight: 0.09094583
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   iteration: 0
   iterationText: {fileID: 1221541384}
-  timeSpeed: 7
+  timeSpeed: 2
 --- !u!4 &421467168
 Transform:
   m_ObjectHideFlags: 0

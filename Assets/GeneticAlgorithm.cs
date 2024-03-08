@@ -25,6 +25,7 @@ public class GeneticAlgorithm : MonoBehaviour
 
     public int timeSpeed = 1;
     private Bird[] birds;
+    int topn; // number of units to be considered top
 
     private void Start()
     {
@@ -41,6 +42,7 @@ public class GeneticAlgorithm : MonoBehaviour
             models[i].Randomize();
             birds[i].model = models[i];
         }
+        topn = Mathf.RoundToInt(numberOfUnits * successStrictness);
 
         Begin();
     }
@@ -65,16 +67,22 @@ public class GeneticAlgorithm : MonoBehaviour
     {
         if (unitsLeft <= 0)
         {
-            int topn = Mathf.RoundToInt(numberOfUnits * successStrictness);
             List<BirdModel> topModels = models.OrderBy(m => ModelSuccessEvaluation(m)).ToList().GetRange(numberOfUnits-topn-1, topn);
-            float bestTime = topModels.Max(m => m.r_time);
-            for (int p = 0; p < topModels.Count; p++)
+            for (int i = 0; i < topModels.Count; i++)
             {
+                // move top models configuration to a new list
+                // to detach them of the models list
+                topModels[i] = topModels[i].Clone();
+            }
+            float bestTime = timeSinceBegin;
+            for (int p = 0; p < topn; p++)
+            {
+                // for each top unit produce unitVersionsNumber clones with slightly different parameters
                 for (int i = 0; i < unitVersionsNumber; i++)
                 {
                     var m = models[p * unitVersionsNumber + i];
                     m.Inherit(topModels[p].weights);
-                    m.Alter(geneticStrictness.Evaluate(bestTime));
+                    m.Alter(geneticStrictness.Evaluate(ScoreManager.instance.maxTime));
                 }
             }
             if (bestTime > ScoreManager.instance.maxTime)

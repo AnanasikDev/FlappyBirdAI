@@ -100,11 +100,21 @@ public class BirdModel
 
     public float r_success;
 
+    public BirdModel Clone()
+    {
+        var clone = new BirdModel();
+        clone.Inherit(weights);
+        clone.r_score = r_score;
+        clone.r_time = r_time;
+        clone.r_success = r_success;
+        return clone;
+    }
+
     public void Randomize()
     {
         for (int i = 0; i < weights.Length; i++)
         {
-            weights[i] = (Random.value - 0.5f) * 50;
+            weights[i] = (Random.value - 0.5f) * 2;
         }
     }
     public void Inherit(float[] _weights)
@@ -118,9 +128,9 @@ public class BirdModel
     {
         for (int w = 0; w < weights.Length; w++)
         {
-            float v = Random.Range(-strictness, strictness);
+            float v = 1+Random.Range(-strictness, strictness);
             //weights[w] *= (Random.value < 0.5f ? 1f / v : v); // Random.Range(1f - strictness, 1f + strictness);
-            weights[w] = weights[w] * v - v;
+            weights[w] = weights[w] * v;
         }
     }
 }
