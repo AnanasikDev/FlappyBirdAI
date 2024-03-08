@@ -6,15 +6,18 @@ public class Bird : MonoBehaviour
     public float jumpIntensity = 1f;
     public BirdModel model;
 
-    private float horizontalDistance;
-    private float distanceToEscape;
-    private float height;
-    private float verticalSpeed;
+    public float horizontalDistance;
+    public float distanceToEscape;
+    public float height;
+    public float verticalSpeed;
+    public float verticalMiss;
 
     public float value;
+    private Vector3 initialPosition;
 
-    private void Start()
+    public void Init()
     {
+        initialPosition = transform.position;
         rigidbody2d = GetComponent<Rigidbody2D>();
     }
 
@@ -26,19 +29,23 @@ public class Bird : MonoBehaviour
     public bool Decide()
     {
         value = Mathf.Pow(height, model.weights[0]) * model.weights[1] *
-                      Mathf.Pow(verticalSpeed, model.weights[2]) * model.weights[3];// *
-                      //Mathf.Pow(horizontalDistance, model.weights[4]) * model.weights[5] *
-                      //Mathf.Pow(distanceToEscape, model.weights[6]) * model.weights[7];
-        return value > 10;
+                Mathf.Pow(verticalSpeed, model.weights[2]) * model.weights[3] *
+                Mathf.Pow(horizontalDistance, model.weights[4]) * model.weights[5] *
+                Mathf.Pow(verticalMiss, model.weights[6]) * model.weights[7];
+        return value > -100000;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        height = transform.position.y + 5; // Always positive unless dead
+        height = transform.position.y;
         verticalSpeed = rigidbody2d.velocity.y;
 
-        horizontalDistance = Vector3.Distance(transform.position, new Vector3(ColumnSpawner.instance.nextColumn.transform.position.x, transform.position.y));
-        distanceToEscape = Vector3.Distance(transform.position, ColumnSpawner.instance.nextColumn.transform.position);
+        horizontalDistance = Mathf.Clamp((Vector3.Distance(transform.position, new Vector3(ColumnSpawner.instance.nextColumn.transform.position.x, transform.position.y))), 0, 11);
+        //distanceToEscape = (Vector3.Distance(transform.position, ColumnSpawner.instance.nextColumn.transform.position));
+        verticalMiss = horizontalDistance < 11 ?
+            Mathf.Abs(ColumnSpawner.instance.nextColumn.upper.transform.position.y - transform.position.y) - 
+            Mathf.Abs(ColumnSpawner.instance.nextColumn.bottom.transform.position.y - transform.position.y)
+            : 0;
 
         if (Decide())
             Jump();
@@ -52,19 +59,27 @@ public class Bird : MonoBehaviour
         }
     }
 
+    public void Revive()
+    {
+        gameObject.SetActive(true);
+        rigidbody2d.simulated = true;
+    }
     private void Die()
     {
         model.r_time = GeneticAlgorithm.instance.timeSinceBegin;
         model.r_score = ScoreManager.instance.score;
         GeneticAlgorithm.instance.unitsLeft--;
-        Destroy(gameObject);
+        gameObject.SetActive(false);
+        gameObject.transform.position = initialPosition;
+        rigidbody2d.velocity = Vector3.zero;
+        rigidbody2d.simulated = false;
     }
 }
 
 [System.Serializable]
 public class BirdModel
 {
-    public float[] weights = new float[4];
+    public float[] weights = new float[8];
     public float r_time;
     public int r_score;
 
@@ -72,7 +87,7 @@ public class BirdModel
     {
         for (int i = 0; i < weights.Length; i++)
         {
-            weights[i] = (Random.value - 0.5f) * 2;
+            weights[i] = (Random.value - 0.5f) * 50;
         }
     }
     public void Inherit(float[] _weights)
@@ -86,7 +101,7 @@ public class BirdModel
     {
         for (int w = 0; w < weights.Length; w++)
         {
-            weights[w] *= Random.Range(1f - strictness, 1f + strictness);
+            weights[w] *= Random.Range(-strictness, strictness); // Random.Range(1f - strictness, 1f + strictness);
         }
     }
 }

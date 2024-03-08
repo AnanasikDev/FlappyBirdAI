@@ -23,15 +23,23 @@ public class GeneticAlgorithm : MonoBehaviour
     public int iteration = 0;
     public TextMeshProUGUI iterationText;
 
+    public int timeSpeed = 1;
+    private Bird[] birds;
+
     private void Start()
     {
+        Time.timeScale = timeSpeed;
         unitVersionsNumber = (int)(1f / successStrictness);
         instance = this;
         models = new BirdModel[numberOfUnits];
+        birds = new Bird[numberOfUnits];
         for (int i = 0; i < numberOfUnits; i++)
         {
+            birds[i] = Instantiate(unit).GetComponent<Bird>();
+            birds[i].Init();
             models[i] = new BirdModel();
             models[i].Randomize();
+            birds[i].model = models[i];
         }
 
         Begin();
@@ -40,19 +48,17 @@ public class GeneticAlgorithm : MonoBehaviour
     {
         iteration++;
         iterationText.text = $"Iteration: {iteration}";
-
         unitsLeft = numberOfUnits; 
         iterationBeginTime = Time.time;
-        for (int i = 0; i < numberOfUnits; i++)
+        foreach (var bird in birds)
         {
-            var bird = Instantiate(unit);
-            bird.GetComponent<Bird>().model = models[i];
+            bird.Revive();
         }
     }
 
     private float ModelSuccessEvaluation(BirdModel m)
     {
-        return m.r_time + Mathf.Pow(m.r_score, 2);
+        return Mathf.Pow(m.r_time, 4) + Mathf.Pow(m.r_score, 2);
     }
     private void Update()
     {
@@ -69,6 +75,10 @@ public class GeneticAlgorithm : MonoBehaviour
                     m.Alter(geneticStrictness);
                 }
             }
+            float bestTime = topModels.Max(m => m.r_time);
+            if (bestTime > ScoreManager.instance.maxTime)
+                RecordTracker.RecordData(models.Where(m => Mathf.Abs(m.r_time - bestTime) < 0.01f).FirstOrDefault());
+            ScoreManager.instance.UpdateRecord(ScoreManager.instance.score, bestTime);
             unitsLeft = numberOfUnits;
             ScoreManager.instance.Restart();
             ColumnSpawner.instance.Restart();

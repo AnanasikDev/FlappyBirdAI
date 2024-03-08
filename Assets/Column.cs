@@ -4,11 +4,7 @@ using UnityEngine;
 
 public class Column : MonoBehaviour
 {
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.CompareTag("ScoreTrigger"))
-        {
-            ScoreManager.instance.IncreaseScore(1);
-        }
-    }
+    public bool passed = false;
+    public Transform upper;
+    public Transform bottom;
 }
