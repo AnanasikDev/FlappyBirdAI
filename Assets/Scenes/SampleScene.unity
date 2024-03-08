@@ -157,7 +157,48 @@ MonoBehaviour:
   unitsLeft: 100
   models: []
   successStrictness: 0.05
-  geneticStrictness: 50
+  geneticStrictness:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 100.38207
+      inSlope: -0.054685093
+      outSlope: -0.054685093
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.6307921
+    - serializedVersion: 3
+      time: 206.7525
+      value: 61.342278
+      inSlope: -0.13894603
+      outSlope: -0.13894603
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 614.56024
+      value: 25.019562
+      inSlope: -0.044056203
+      outSlope: -0.044056203
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.17153275
+    - serializedVersion: 3
+      time: 2000
+      value: 4
+      inSlope: -0.009712874
+      outSlope: -0.009712874
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.065976106
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   iteration: 0
   iterationText: {fileID: 1221541384}
   timeSpeed: 5
@@ -1018,7 +1059,7 @@ MonoBehaviour:
   number: 3
   distance: 25
   startX: 20
-  heightVariance: 5
+  heightVariance: 3
   speedCurve:
     serializedVersion: 2
     m_Curve:

@@ -7,10 +7,12 @@ public class Bird : MonoBehaviour
     public BirdModel model;
 
     public float horizontalDistance;
-    public float distanceToEscape;
+    //public float distanceToEscape;
     public float height;
     public float verticalSpeed;
-    public float verticalMiss;
+    public float bottomEdge;
+    //public float topEdge;
+    //public float verticalMiss;
 
     public float value;
     private Vector3 initialPosition;
@@ -29,9 +31,9 @@ public class Bird : MonoBehaviour
     public bool Decide()
     {
         value = Mathf.Pow(height, model.weights[0]) * model.weights[1] *
-                Mathf.Pow(verticalSpeed, model.weights[2]) * model.weights[3] *
-                Mathf.Pow(horizontalDistance, model.weights[4]) * model.weights[5] *
-                Mathf.Pow(verticalMiss, model.weights[6]) * model.weights[7];
+                Mathf.Pow(verticalSpeed, model.weights[1]) * model.weights[0] *
+                Mathf.Pow(horizontalDistance, model.weights[2]) * model.weights[3] *
+                Mathf.Pow(bottomEdge, model.weights[3]) * model.weights[4];
         return value > -100000;
     }
 
@@ -42,10 +44,16 @@ public class Bird : MonoBehaviour
 
         horizontalDistance = Mathf.Clamp((Vector3.Distance(transform.position, new Vector3(ColumnSpawner.instance.nextColumn.transform.position.x, transform.position.y))), 0, 11);
         //distanceToEscape = (Vector3.Distance(transform.position, ColumnSpawner.instance.nextColumn.transform.position));
-        verticalMiss = horizontalDistance < 11 ?
-            Mathf.Abs(ColumnSpawner.instance.nextColumn.upper.transform.position.y - transform.position.y) - 
-            Mathf.Abs(ColumnSpawner.instance.nextColumn.bottom.transform.position.y - transform.position.y)
-            : 0;
+        /*verticalMiss = horizontalDistance < 11 ?
+            Mathf.Abs(ColumnSpawner.instance.nextColumn.top.transform.position.y - transform.position.y) - 
+            Mathf.Abs(ColumnSpawner.instance.nextColumn.bottom.transform.position.y - transform.position.y) - 1
+            : 0;*/
+        bottomEdge = horizontalDistance < 11 ?
+                ColumnSpawner.instance.nextColumn.bottomEdge.transform.position.y - transform.position.y
+                : 0;
+        /*topEdge = horizontalDistance < 11 ?
+                transform.position.y - ColumnSpawner.instance.nextColumn.topEdge.transform.position.y
+                : 0;*/
 
         if (Decide())
             Jump();
@@ -79,7 +87,7 @@ public class Bird : MonoBehaviour
 [System.Serializable]
 public class BirdModel
 {
-    public float[] weights = new float[8];
+    public float[] weights = new float[5];
     public float r_time;
     public int r_score;
 

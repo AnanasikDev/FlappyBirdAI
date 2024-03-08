@@ -12,7 +12,7 @@ public class GeneticAlgorithm : MonoBehaviour
     [SerializeField] private BirdModel[] models;
 
     public float successStrictness = 0.2f; // portion of the best to be selected for the next generation
-    public float geneticStrictness = 0.075f; // how much generations differ
+    public AnimationCurve geneticStrictness;
     private int unitVersionsNumber;
 
     private float iterationBeginTime;
@@ -46,6 +46,7 @@ public class GeneticAlgorithm : MonoBehaviour
     }
     private void Begin()
     {
+        Time.timeScale = timeSpeed;
         iteration++;
         iterationText.text = $"Iteration: {iteration}";
         unitsLeft = numberOfUnits; 
@@ -72,7 +73,7 @@ public class GeneticAlgorithm : MonoBehaviour
                 {
                     var m = models[p * unitVersionsNumber + i];
                     m.Inherit(topModels[p].weights);
-                    m.Alter(geneticStrictness);
+                    m.Alter(geneticStrictness.Evaluate(iteration));
                 }
             }
             float bestTime = topModels.Max(m => m.r_time);
