@@ -11,7 +11,7 @@ public class Bird : MonoBehaviour
     public float height;
     public float verticalSpeed;
     public float bottomEdge;
-    //public float topEdge;
+    public float topEdge;
     //public float verticalMiss;
 
     public float value;
@@ -30,11 +30,17 @@ public class Bird : MonoBehaviour
 
     public bool Decide()
     {
-        value = Mathf.Pow(height, model.weights[0]) * model.weights[1] *
-                Mathf.Pow(verticalSpeed, model.weights[1]) * model.weights[0] *
-                Mathf.Pow(horizontalDistance, model.weights[2]) * model.weights[3] *
-                Mathf.Pow(bottomEdge, model.weights[3]) * model.weights[4];
-        return value > -100000;
+        /*value = Mathf.Pow(height, model.weights[0]) * model.weights[1] +
+                Mathf.Pow(verticalSpeed, model.weights[2]) * model.weights[3];// +
+                //Mathf.Pow(horizontalDistance, model.weights[2]) * model.weights[3] +
+                //Mathf.Pow(bottomEdge, model.weights[4]) * model.weights[5];// *
+                //Mathf.Pow(topEdge, model.weights[5]) * model.weights[6];*/
+
+        value = height * model.weights[0] + 
+                verticalSpeed * model.weights[1] +
+                horizontalDistance * model.weights[2] *
+                bottomEdge * model.weights[3];
+        return value > 0;
     }
 
     private void FixedUpdate()
@@ -87,7 +93,7 @@ public class Bird : MonoBehaviour
 [System.Serializable]
 public class BirdModel
 {
-    public float[] weights = new float[5];
+    public float[] weights = new float[4];
     public float r_time;
     public int r_score;
 
@@ -109,7 +115,9 @@ public class BirdModel
     {
         for (int w = 0; w < weights.Length; w++)
         {
-            weights[w] *= Random.Range(-strictness, strictness); // Random.Range(1f - strictness, 1f + strictness);
+            float v = Random.Range(-strictness, strictness);
+            //weights[w] *= (Random.value < 0.5f ? 1f / v : v); // Random.Range(1f - strictness, 1f + strictness);
+            weights[w] = weights[w] * v - v;
         }
     }
 }

@@ -156,52 +156,34 @@ MonoBehaviour:
   numberOfUnits: 100
   unitsLeft: 100
   models: []
-  successStrictness: 0.05
+  successStrictness: 0.1
   geneticStrictness:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 100.38207
-      inSlope: -0.054685093
-      outSlope: -0.054685093
+      value: 3
+      inSlope: -0.4543051
+      outSlope: -0.4543051
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
-      outWeight: 0.6307921
+      outWeight: 0.99503464
     - serializedVersion: 3
-      time: 206.7525
-      value: 61.342278
-      inSlope: -0.13894603
-      outSlope: -0.13894603
-      tangentMode: 34
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 614.56024
-      value: 25.019562
-      inSlope: -0.044056203
-      outSlope: -0.044056203
+      time: 20
+      value: 0.4
+      inSlope: -0.007233461
+      outSlope: -0.007233461
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.17153275
-    - serializedVersion: 3
-      time: 2000
-      value: 4
-      inSlope: -0.009712874
-      outSlope: -0.009712874
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.065976106
+      inWeight: 0.100714765
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
   iteration: 0
   iterationText: {fileID: 1221541384}
-  timeSpeed: 5
+  timeSpeed: 7
 --- !u!4 &421467168
 Transform:
   m_ObjectHideFlags: 0
@@ -334,9 +316,9 @@ RectTransform:
   m_Father: {fileID: 838588968}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 262}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -86}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &771678078
@@ -630,9 +612,9 @@ RectTransform:
   m_Father: {fileID: 838588968}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1026.5, y: -86}
+  m_AnchorMin: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -443.5, y: -86}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1146211888
@@ -1057,9 +1039,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   column: {fileID: -1411047379693844229, guid: 864efc58e3a51bc40acede2266857313, type: 3}
   number: 3
-  distance: 25
-  startX: 20
-  heightVariance: 3
+  distance: 15
+  startX: 25
+  heightVariance: 4
   speedCurve:
     serializedVersion: 2
     m_Curve:

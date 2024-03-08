@@ -59,7 +59,7 @@ public class GeneticAlgorithm : MonoBehaviour
 
     private float ModelSuccessEvaluation(BirdModel m)
     {
-        return Mathf.Pow(m.r_time, 4) + Mathf.Pow(m.r_score, 2);
+        return Mathf.Pow(m.r_time, 2) + Mathf.Pow(m.r_score, 4);
     }
     private void Update()
     {
@@ -67,16 +67,16 @@ public class GeneticAlgorithm : MonoBehaviour
         {
             int topn = (int)(numberOfUnits * successStrictness);
             List<BirdModel> topModels = models.OrderBy(m => ModelSuccessEvaluation(m)).ToList().GetRange(numberOfUnits-topn-1, topn);
+            float bestTime = topModels.Max(m => m.r_time);
             for (int p = 0; p < topModels.Count; p++)
             {
                 for (int i = 0; i < unitVersionsNumber; i++)
                 {
                     var m = models[p * unitVersionsNumber + i];
                     m.Inherit(topModels[p].weights);
-                    m.Alter(geneticStrictness.Evaluate(iteration));
+                    m.Alter(geneticStrictness.Evaluate(bestTime));
                 }
             }
-            float bestTime = topModels.Max(m => m.r_time);
             if (bestTime > ScoreManager.instance.maxTime)
                 RecordTracker.RecordData(models.Where(m => Mathf.Abs(m.r_time - bestTime) < 0.01f).FirstOrDefault());
             ScoreManager.instance.UpdateRecord(ScoreManager.instance.score, bestTime);
