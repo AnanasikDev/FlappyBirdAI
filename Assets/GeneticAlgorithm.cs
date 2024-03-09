@@ -1,34 +1,22 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using UnityEngine;
 
+// Genetic algorithm of selection chooses best models from current generation,
+// copies their genes onto other models with subtle alterations (mutations).
 public class GeneticAlgorithm : MonoBehaviour
 {
-    public GameObject unit;
-    public int numberOfUnits = 10;
-    public int unitsLeft = 10;
+    public GameObject unit; // prefab of a bird model
+    public int numberOfUnits = 10; // number of units being trained simultaneously
+    public int unitsLeft = 10; // number of units that are still alive in current iteration
     [SerializeField] private BirdModel[] models;
 
     public AnimationCurve successStrictnessByScore; // portion of the best to be selected for the next generation
     public AnimationCurve geneticStrictnessByMaxTime;
-    public float successStrictness { get
-        {
-            return 0.02f;
-            float v = successStrictnessByScore.Evaluate(ScoreManager.instance.maxScore);
-            if (v > 0.375f) return 0.5f;
-            if (v > 0.225f) return 0.25f;
-            if (v > 0.15f) return 0.2f;
-            if (v > 0.075f) return 0.1f;
-            if (v > 0.035f) return 0.05f;
-            if (v > 0.015f) return 0.02f;
-            if (v > 0.005f) return 0.01f;
-            return 0.5f;
-        } }
-    private int unitVersionsNumber;
+    public float successStrictness = 0.02f; // strictness of success criteria
 
-    private float iterationBeginTime;
+    private float iterationBeginTime; // time in seconds since begin of current iteration. Used for success evaluation
     public float timeSinceBegin { get { return Time.time - iterationBeginTime; } }
 
     public static GeneticAlgorithm instance;
@@ -36,12 +24,11 @@ public class GeneticAlgorithm : MonoBehaviour
     public int iteration = 0;
     public TextMeshProUGUI iterationText;
 
-    public int timeSpeed = 1;
+    public int timeSpeed = 1; // time scale (2-7 recommended)
     private Bird[] birds;
+    
+    int unitVersionsNumber; // How many units will inherit genes of one unit of previous generation
     int topn; // number of units to be considered top
-
-    private int mutationi = 0; // counting until next big mutation
-    public int score25; // score gathered in 25 iterations in total
 
     private void Start()
     {
@@ -61,13 +48,17 @@ public class GeneticAlgorithm : MonoBehaviour
 
         Begin();
     }
+
     private void Begin()
     {
-        Time.timeScale = timeSpeed;
+        // Begin new iteration
+
+        Time.timeScale = timeSpeed; // dynamic time scale (for training & showcase)
         iteration++;
         iterationText.text = $"Iteration: {iteration}";
         unitsLeft = numberOfUnits; 
         iterationBeginTime = Time.time;
+
         foreach (var bird in birds)
         {
             bird.Revive();
@@ -82,7 +73,7 @@ public class GeneticAlgorithm : MonoBehaviour
     {
         if (unitsLeft <= 0)
         {
-            topn = Mathf.RoundToInt(numberOfUnits * successStrictness);
+            topn = Mathf.RoundToInt(numberOfUnits * successStrictness); // number of units to be selected as top of their generation
             List<BirdModel> topModels = models.OrderBy(m => ModelSuccessEvaluation(m)).ToList().GetRange(numberOfUnits-topn-1, topn);
             for (int i = 0; i < topModels.Count; i++)
             {
@@ -90,17 +81,7 @@ public class GeneticAlgorithm : MonoBehaviour
                 // to detach them of the models list
                 topModels[i] = topModels[i].Clone();
             }
-            float bestTime = timeSinceBegin;
-            /*mutationi++;
-            score25 += ScoreManager.instance.score;
-            float mutation = 1;
-            if (mutationi >= 25)
-            {
-                mutationi = 0;
-                if (score25 < 40)
-                    mutation = 5;
-                score25 = 0;
-            }*/
+            float bestTime = timeSinceBegin; // at the end of generation best time is time since begin of that iteration
             for (int p = 0; p < topn; p++)
             {
                 // for each top unit produce unitVersionsNumber clones with slightly different parameters
@@ -112,6 +93,8 @@ public class GeneticAlgorithm : MonoBehaviour
                 }
             }
             ScoreManager.instance.UpdateRecord(ScoreManager.instance.score, bestTime);
+            
+            // begin next iteration
             ScoreManager.instance.Restart();
             ColumnSpawner.instance.Restart();
             Begin();

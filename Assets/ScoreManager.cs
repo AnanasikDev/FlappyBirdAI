@@ -4,10 +4,9 @@ using UnityEngine;
 public class ScoreManager : MonoBehaviour
 {
     public TextMeshProUGUI scoreText;
-    public TextMeshProUGUI recordText;
+    public TextMeshProUGUI recordText; // displays max score and max time of all generations
     public float maxTime = 0;
     public int maxScore = 0;
-
 
     public int score;
 

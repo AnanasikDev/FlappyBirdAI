@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// Human-controller bird for gameplay tests
 public class Player : MonoBehaviour
 {
     private Rigidbody2D rigidbody2d;

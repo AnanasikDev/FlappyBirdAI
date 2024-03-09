@@ -1,21 +1,20 @@
 using UnityEngine;
 
+// Neural network-controlled bird model
 public class Bird : MonoBehaviour
 {
     private Rigidbody2D rigidbody2d;
-    public float jumpIntensity = 1f;
-    public BirdModel model;
-
-    public float horizontalDistance;
-    //public float distanceToEscape;
-    public float height;
-    public float verticalSpeed;
-    public float bottomEdge;
-    public float topEdge;
-    //public float verticalMiss;
-
-    public float value;
     private Vector3 initialPosition;
+    public float jumpIntensity = 1f;
+    public BirdModel model; // settings and results of this model
+
+    public float horizontalDistance; // horizontal distance to the nearest column, if it is visible
+    public float height;             // vertical distance to midline of the screen
+    public float verticalSpeed;      // vertical speed
+    public float bottomEdge;         // vertical distance to the top edge of the bottom column of the nearest obstacle, if visible
+    public float topEdge;            // vertical distance to the bototm edge of the top column of the nearest obstacle, if visible. Used for success evaluation
+
+    public float value;     // neural network output that is to decide whether to jump or not
 
     public void Init()
     {
@@ -30,12 +29,7 @@ public class Bird : MonoBehaviour
 
     public bool Decide()
     {
-        /*value = Mathf.Pow(height, model.weights[0]) * model.weights[1] +
-                Mathf.Pow(verticalSpeed, model.weights[2]) * model.weights[3];// +
-                //Mathf.Pow(horizontalDistance, model.weights[2]) * model.weights[3] +
-                //Mathf.Pow(bottomEdge, model.weights[4]) * model.weights[5];// *
-                //Mathf.Pow(topEdge, model.weights[5]) * model.weights[6];*/
-
+        // Based on input values and weights decides, whether to jump or not
         value = height * model.weights[0] + 
                 verticalSpeed * model.weights[1] +
                 horizontalDistance * model.weights[2] +
@@ -45,16 +39,12 @@ public class Bird : MonoBehaviour
 
     private void FixedUpdate()
     {
-        height = transform.position.y;
+        height = transform.position.y; // 0 is at the midheight of the screen
         verticalSpeed = rigidbody2d.velocity.y;
 
         horizontalDistance = Mathf.Clamp((Vector3.Distance(transform.position, new Vector3(ColumnSpawner.instance.nextColumn.transform.position.x, transform.position.y))), 0, 11);
-        //distanceToEscape = (Vector3.Distance(transform.position, ColumnSpawner.instance.nextColumn.transform.position));
-        /*verticalMiss = horizontalDistance < 11 ?
-            Mathf.Abs(ColumnSpawner.instance.nextColumn.top.transform.position.y - transform.position.y) - 
-            Mathf.Abs(ColumnSpawner.instance.nextColumn.bottom.transform.position.y - transform.position.y) - 1
-            : 0;*/
-        bottomEdge = horizontalDistance < 11 ?
+        
+        bottomEdge = horizontalDistance < 11 ? // only if next column is visible
                 ColumnSpawner.instance.nextColumn.bottomEdge.transform.position.y - transform.position.y
                 : 0;
         topEdge = horizontalDistance < 11 ?
@@ -126,11 +116,12 @@ public class BirdModel
     }
     public void Alter(float strictness)
     {
+        // Mutation algorithm
+
         for (int w = 0; w < weights.Length; w++)
         {
-            float v = 1+Random.Range(-strictness, strictness);
-            //weights[w] *= (Random.value < 0.5f ? 1f / v : v); // Random.Range(1f - strictness, 1f + strictness);
-            weights[w] = weights[w] * v;// * (Random.value < 0.01f ? -1 : 1);
+            float v = 1 + Random.Range(-strictness, strictness);
+            weights[w] = weights[w] * v;
         }
     }
 }
