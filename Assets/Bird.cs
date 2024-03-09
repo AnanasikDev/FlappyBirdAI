@@ -73,11 +73,11 @@ public class Bird : MonoBehaviour
         model.r_time = GeneticAlgorithm.instance.timeSinceBegin;
         model.r_score = ScoreManager.instance.score;
         model.r_success = GeneticAlgorithm.instance.timeSinceBegin * Mathf.Pow(ScoreManager.instance.score, 2) / (topEdge - bottomEdge != 0 ? Mathf.Pow(Mathf.Abs(topEdge - bottomEdge), 2) : 1);
-        GeneticAlgorithm.instance.unitsLeft--;
         gameObject.SetActive(false);
         gameObject.transform.position = initialPosition;
         rigidbody2d.velocity = Vector3.zero;
         rigidbody2d.simulated = false;
+        GeneticAlgorithm.instance.OnUnitDied();
     }
 }
 

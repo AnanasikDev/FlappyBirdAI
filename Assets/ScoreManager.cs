@@ -33,6 +33,6 @@ public class ScoreManager : MonoBehaviour
         if (maxScore < score) maxScore = score;
         if (maxTime < time) maxTime = time;
 
-        recordText.text = $"MS:{maxScore} / MT:{System.Math.Round(maxTime, 2)}";
+        recordText.text = $"Max score: {maxScore}\nMax time: {System.Math.Round(maxTime, 2)}";
     }
 }
