@@ -35,14 +35,26 @@ public class ColumnSpawner : MonoBehaviour
         foreach (var column in columns)
         {
             column.transform.Translate(Vector3.left * CalculateSpeed());
+
+            /*if (!column.passed && column.transform.position.x < -5)
+            {
+                column.passed = true;
+                ScoreManager.instance.IncreaseScore(1);
+            }
+            if (column.transform.position.x < -20)
+            {
+                column.transform.position = new Vector3(startX, (Random.value - 0.5f) * heightVariance, 0);
+                column.passed = false;
+            }*/
         }
     }
 
+    
     private void Update()
     {
         foreach (var column in columns)
         {
-            if (!column.passed && column.transform.position.x < -5)
+            if (!column.passed && column.transform.position.x < -6)
             {
                 column.passed = true;
                 ScoreManager.instance.IncreaseScore(1);
@@ -60,6 +72,7 @@ public class ColumnSpawner : MonoBehaviour
         for (int i = 0; i < number; i++)
         {
             columns[i].transform.position = new Vector3(startX + i * distance, (Random.value - 0.5f) * heightVariance, 0);
+            columns[i].passed = false;
         }
     }
 }
